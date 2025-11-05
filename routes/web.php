@@ -1,12 +1,16 @@
 <?php
 
 use App\Enum\UserRole;
-use App\Http\Controllers\AuthController;
-use App\Http\Controllers\DashboardController;
-use App\Http\Controllers\PenggunaController;
-use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\AuthController;
+use App\Http\Controllers\UserController;
+use App\Http\Controllers\BengkelController;
+use App\Http\Controllers\ServiceController;
+use App\Http\Controllers\PenggunaController;
+use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\AdminBengkelController;
+use App\Http\Controllers\BengkelServiceController;
 
 // Authentication
 Route::middleware('guest')->group(function () {
@@ -52,6 +56,7 @@ Route::prefix('akun/admin')->middleware(['auth', 'role:ADMIN'])->group(function 
     Route::put('/update/{akun}', [UserController::class, 'update'])->name('admin.update');
     Route::delete('delete/{akun}', [UserController::class, 'destroy'])->name('admin.destroy');
 });
+
 Route::prefix('akun/pengguna')->middleware(['auth', 'role:ADMIN'])->group(function () {
     Route::get('/', [PenggunaController::class, 'index'])->name('pengguna.index');
     Route::get('/create', [PenggunaController::class, 'create'])->name('pengguna.create');
@@ -59,6 +64,46 @@ Route::prefix('akun/pengguna')->middleware(['auth', 'role:ADMIN'])->group(functi
     Route::get('/edit/{pengguna}', [PenggunaController::class, 'edit'])->name('pengguna.edit');
     Route::put('/update/{pengguna}', [PenggunaController::class, 'update'])->name('pengguna.update');
     Route::delete('/delete/{pengguna}', [PenggunaController::class, 'destroy'])->name('pengguna.destroy');
+});
+
+Route::prefix('akun/admin-bengkel')->middleware(['auth', 'role:ADMIN'])->group(function () {
+    Route::get('/', [AdminBengkelController::class, 'index'])->name('admin-bengkel.index');
+    Route::get('/create', [AdminBengkelController::class, 'create'])->name('admin-bengkel.create');
+    Route::post('/store', [AdminBengkelController::class, 'store'])->name('admin-bengkel.store');
+    Route::get('/edit/{adminBengkel}', [AdminBengkelController::class, 'edit'])->name('admin-bengkel.edit');
+    Route::put('/update/{adminBengkel}', [AdminBengkelController::class, 'update'])->name('admin-bengkel.update');
+    Route::delete('/delete/{adminBengkel}', [AdminBengkelController::class, 'destroy'])->name('admin-bengkel.destroy');
+});
+
+Route::prefix('bengkel')->as('bengkel.')->middleware(['auth', 'role:ADMIN'])->group(function () {
+    Route::prefix('list')->as('list.')->group(function () {
+        Route::get('/', [BengkelController::class, 'index'])->name('index');
+        Route::get('/create', [BengkelController::class, 'create'])->name('create');
+        Route::post('/store', [BengkelController::class, 'store'])->name('store');
+        Route::get('/edit/{bengkel}', [BengkelController::class, 'edit'])->name('edit');
+        Route::put('/update/{bengkel}', [BengkelController::class, 'update'])->name('update');
+        Route::delete('/delete/{bengkel}', [BengkelController::class, 'destroy'])->name('destroy');
+    });
+    Route::prefix('map')->as('map.')->group(function () {
+        Route::get('/', [BengkelController::class, 'indexMap'])->name('index');
+    });
+    Route::prefix('service')->as('service.')->group(function () {
+        Route::get('/', [BengkelServiceController::class, 'index'])->name('index');
+        Route::get('/create', [BengkelServiceController::class, 'create'])->name('create');
+        Route::post('/store', [BengkelServiceController::class, 'store'])->name('store');
+        Route::get('/edit/{bengkelService}', [BengkelServiceController::class, 'edit'])->name('edit');
+        Route::put('/update/{bengkelService}', [BengkelServiceController::class, 'update'])->name('update');
+        Route::delete('/delete/{bengkelService}', [BengkelServiceController::class, 'destroy'])->name('destroy');
+    });
+});
+
+Route::prefix('service')->as('service.')->group(function () {
+    Route::get('/', [ServiceController::class, 'index'])->name('index');
+    Route::get('/create', [ServiceController::class, 'create'])->name('create');
+    Route::post('/store', [ServiceController::class, 'store'])->name('store');
+    Route::get('/edit/{service}', [ServiceController::class, 'edit'])->name('edit');
+    Route::put('/update/{service}', [ServiceController::class, 'update'])->name('update');
+    Route::delete('/delete/{service}', [ServiceController::class, 'destroy'])->name('destroy');
 });
 
 // Public User

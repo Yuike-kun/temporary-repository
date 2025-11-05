@@ -1,4 +1,4 @@
- <div class="col-xl-3 col-lg-4 theiaStickySidebar">
+<div class="col-xl-3 col-lg-4 theiaStickySidebar">
      <div class="card user-sidebar agent-sidebar mb-lg-0 mb-4">
          <div class="card-header user-sidebar-header bg-gray-transparent text-center">
              <div class="agent-profile d-inline-flex">

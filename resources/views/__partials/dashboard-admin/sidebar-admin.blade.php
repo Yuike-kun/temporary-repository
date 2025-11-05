@@ -9,7 +9,7 @@
 {{-- Laporan --}}
 <x-nav-title title="Laporan" />
 <x-nav-item
-    href="/laporan/darurat"
+    {{-- href="{{ route('laporan.darurat') }}" --}}
     title="Laporan Darurat"
     icon="alert-triangle"
 />
@@ -17,22 +17,22 @@
 {{-- Bengkel --}}
 <x-nav-title title="Bengkel" />
 <x-nav-item
-    href="/bengkels"
+    href="{{ route('bengkel.list.index') }}"
     title="List Bengkel"
     icon="list"
 />
 <x-nav-item
-    href="/bengkels/map"
+    href="{{ route('bengkel.map.index') }}"
     title="Map Lokasi"
     icon="map-pin"
 />
 <x-nav-item
-    href="/bengkels/add"
+    href="{{ route('bengkel.list.create') }}"
     title="Tambah Bengkel"
     icon="wrench"
 />
 <x-nav-item
-    href="/services"
+    href="{{ route('bengkel.service.index') }}"
     title="Service"
     icon="hammer"
 />
@@ -45,12 +45,12 @@
     icon="shield"
 />
 <x-nav-item
-    href="/akun/admin-bengkel"
+    href="{{ route('admin-bengkel.index') }}"
     title="Admin Bengkel"
     icon="user-cog"
 />
 <x-nav-item
-    href="/akun/pengguna"
+    href="{{ route('pengguna.index') }}"
     title="Pengguna"
     icon="users"
 />
@@ -58,7 +58,7 @@
 {{-- Settings --}}
 <x-nav-title title="Settings" />
 <x-nav-item
-    href="/settings"
+    {{-- href="{{ route('settings.index') }}" --}}
     title="Setting"
     icon="settings"
 />

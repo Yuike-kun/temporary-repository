@@ -4,7 +4,7 @@
             <div class="col-md-8">
                 <div class="card">
                     <div class="card-header">
-                        <h4 class="mb-0">Tambah Pengguna</h4>
+                        <h4 class="mb-0">Tambah Admin Bengkel</h4>
                     </div>
                     <div class="card-body">
                         @if ($errors->any())
@@ -18,7 +18,7 @@
                             </div>
                         @endif
 
-                        <form action="{{ route('pengguna.store') }}" method="POST" enctype="multipart/form-data">
+                        <form action="{{ route('admin-bengkel.store') }}" method="POST" enctype="multipart/form-data">
                             @csrf
 
                             <div class="mb-3">
@@ -69,7 +69,7 @@
 
                             <div class="d-flex gap-2">
                                 <button type="submit" class="btn btn-primary">Simpan</button>
-                                <a href="{{ route('pengguna.index') }}" class="btn btn-secondary">Batal</a>
+                                <a href="{{ route('admin-bengkel.index') }}" class="btn btn-secondary">Batal</a>
                             </div>
                         </form>
                     </div>

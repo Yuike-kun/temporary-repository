@@ -2,9 +2,9 @@
     <div class="col-lg-12">
         <div class="card border-0 shadow-sm">
             <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
-                <h6 class="mb-0">Daftar Akun Pengguna</h6>
-                <a href="{{ route('pengguna.create') }}" class="btn btn-light btn-sm text-primary">
-                    <i class="bi bi-plus-circle"></i> Tambah Pengguna
+                <h6 class="mb-0">Daftar List Servis</h6>
+                <a href="{{ route('service.create') }}" class="btn btn-light btn-sm text-primary">
+                    <i class="bi bi-plus-circle"></i> Tambah Servis
                 </a>
             </div>
 
@@ -13,8 +13,8 @@
                     <div role="complementary" class="gridjs gridjs-container" style="width: 100%;">
                         <div class="gridjs-head">
                             <div class="gridjs-search">
-                                <input type="search" class="form-control" placeholder="Cari pengguna..." aria-label="Cari pengguna..."
-                                    class="gridjs-input gridjs-search-input" onkeyup="filterTable(this.value)">
+                                <input type="search" placeholder="Cari servis..." aria-label="Cari servis..."
+                                    class="gridjs-input gridjs-search-input form-control" onkeyup="filterTable(this.value)">
                             </div>
                         </div>
 
@@ -23,46 +23,33 @@
                                 <thead class="gridjs-thead bg-light">
                                     <tr class="gridjs-tr">
                                         <th class="gridjs-th">#</th>
-                                        <th class="gridjs-th">Foto</th>
-                                        <th class="gridjs-th">Nama</th>
-                                        <th class="gridjs-th">Email</th>
-                                        <th class="gridjs-th">Role</th>
+                                        <th class="gridjs-th">Nama Servis</th>
+                                        <th class="gridjs-th">Deskripsi</th>
                                         <th class="gridjs-th text-center">Aksi</th>
                                     </tr>
                                 </thead>
                                 <tbody class="gridjs-tbody" id="adminTableBody">
-                                    @forelse ($users as $user)
+                                    @forelse ($services as $service)
                                         <tr class="gridjs-tr">
                                             <td class="gridjs-td">{{ $loop->iteration }}</td>
-                                            <td class="gridjs-td">
-                                                <img src="{{ $user->avatar }}" alt="{{ $user->name }}"
-                                                    class="rounded-circle" width="40" height="40">
-                                            </td>
-                                            <td class="gridjs-td">{{ $user->name }}</td>
-                                            <td class="gridjs-td">{{ $user->email }}</td>
-                                            <td class="gridjs-td">
-                                                @if(\App\Enum\UserRole::PUBLIC->value == $user->role->value)
-                                                    Pengguna
-                                                @elseif(\App\Enum\UserRole::BENGKEL->value == $user->role->value)
-                                                    Bengkel
-                                                @endif
-                                            </td>
+                                            <td class="gridjs-td">{{ $service->name }}</td>
+                                            <td class="gridjs-td">{{ $service->description ?? '-' }}</td>
                                             <td class="gridjs-td text-center">
-                                                <a href="{{ route('pengguna.edit', $user->id) }}"
+                                                <a href="{{ route('service.edit', $service->id) }}"
                                                     class="btn btn-warning btn-sm">Edit</a>
-                                                <form action="{{ route('pengguna.destroy', $user->id) }}"
+                                                <form action="{{ route('service.destroy', $service->id) }}"
                                                     method="POST" class="d-inline">
                                                     @csrf
                                                     @method('DELETE')
                                                     <button type="submit"
-                                                        onclick="return confirm('Yakin ingin menghapus akun ini?')"
+                                                        onclick="return confirm('Yakin ingin menghapus servis ini?')"
                                                         class="btn btn-danger btn-sm">Hapus</button>
                                                 </form>
                                             </td>
                                         </tr>
                                     @empty
                                         <tr>
-                                            <td colspan="5" class="text-center text-muted">Belum ada data admin.</td>
+                                            <td colspan="4" class="text-center text-muted">Belum ada data servis.</td>
                                         </tr>
                                     @endforelse
                                 </tbody>

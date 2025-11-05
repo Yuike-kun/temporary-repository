@@ -58,25 +58,6 @@
                             </div>
 
                             <div class="mb-3">
-                                <label for="role" class="form-label">Role</label>
-                                <select class="form-select @error('role') is-invalid @enderror" id="role"
-                                    name="role" required>
-                                    <option value="">Pilih Role</option>
-                                    <option value="{{ \App\Enum\UserRole::PUBLIC->value }}"
-                                        @selected(old('role', $pengguna->role->value) == \App\Enum\UserRole::PUBLIC->value)>
-                                        Pengguna
-                                    </option>
-                                    <option value="{{ \App\Enum\UserRole::BENGKEL->value }}"
-                                        @selected(old('role', $pengguna->role->value) == \App\Enum\UserRole::BENGKEL->value)>
-                                        Bengkel
-                                    </option>
-                                </select>
-                                @error('role')
-                                    <span class="invalid-feedback">{{ $message }}</span>
-                                @enderror
-                            </div>
-
-                            <div class="mb-3">
                                 <label for="avatar" class="form-label">Avatar (Opsional)</label>
                                 @if($pengguna->avatar)
                                     <div class="mb-2">

@@ -11,7 +11,7 @@ class PenggunaController extends Controller
 {
     public function index()
     {
-        $users = User::whereNot('role', UserRole::ADMIN)->get();
+        $users = User::where('role', UserRole::PUBLIC)->get();
         return view('pengguna.index', compact('users'));
     }
 
@@ -26,7 +26,6 @@ class PenggunaController extends Controller
             'name'     => 'required|string|max:255',
             'email'    => 'required|string|email|max:255|unique:users',
             'password' => 'required|string|min:8|confirmed',
-            'role'     => 'required|string',
             'avatar'   => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
         ]);
 
@@ -35,6 +34,7 @@ class PenggunaController extends Controller
         if ($request->hasFile('avatar')) {
             $validatedData['avatar'] = $request->file('avatar')->store('avatars', 'public');
         }
+        $validatedData['role'] = UserRole::PUBLIC;
 
         User::create($validatedData);
 
