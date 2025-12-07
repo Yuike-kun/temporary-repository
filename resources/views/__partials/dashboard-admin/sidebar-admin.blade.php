@@ -33,7 +33,12 @@
 />
 <x-nav-item
     href="{{ route('bengkel.service.index') }}"
-    title="Service"
+    title="Service Bengkel"
+    icon="hammer"
+/>
+<x-nav-item
+    href="{{ route('service.index') }}"
+    title="List Service"
     icon="hammer"
 />
 

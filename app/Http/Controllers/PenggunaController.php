@@ -53,9 +53,10 @@ class PenggunaController extends Controller
             'name'     => 'required|string|max:255',
             'email'    => 'required|string|email|max:255|unique:users,email,' . $pengguna->id,
             'password' => 'nullable|string|min:8|confirmed',
-            'role'     => 'required|string',
             'avatar'   => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
         ]);
+
+        $validatedData['role'] = UserRole::PUBLIC;
 
         if ($request->hasFile('avatar')) {
             $validatedData['avatar'] = $request->file('avatar')->store('avatars', 'public');

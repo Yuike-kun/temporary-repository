@@ -11,6 +11,7 @@ use App\Http\Controllers\PenggunaController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\AdminBengkelController;
 use App\Http\Controllers\BengkelServiceController;
+use App\Http\Controllers\ServiceRequestController;
 
 // Authentication
 Route::middleware('guest')->group(function () {
@@ -23,8 +24,9 @@ Route::middleware('guest')->group(function () {
 Route::get('/logout', [AuthController::class, 'logout'])->middleware('auth')->name('logout');
 
 // Guest Route
-Route::view('/', 'landing.index');
-Route::view('/bengkels', 'landing.bengkels.grid');
+Route::view('/', 'landing.index')->name('landing');
+Route::get('/bengkels', [BengkelController::class, 'grid'])->name('bengkels.grid');
+Route::get('/bengkels/{bengkel}', [BengkelController::class, 'show'])->name('bengkels.show');
 
 // Dashboard Redirect
 Route::redirect('/dashboards', '/dashboard-redirect');
@@ -87,17 +89,9 @@ Route::prefix('bengkel')->as('bengkel.')->middleware(['auth', 'role:ADMIN'])->gr
     Route::prefix('map')->as('map.')->group(function () {
         Route::get('/', [BengkelController::class, 'indexMap'])->name('index');
     });
-    Route::prefix('service')->as('service.')->group(function () {
-        Route::get('/', [BengkelServiceController::class, 'index'])->name('index');
-        Route::get('/create', [BengkelServiceController::class, 'create'])->name('create');
-        Route::post('/store', [BengkelServiceController::class, 'store'])->name('store');
-        Route::get('/edit/{bengkelService}', [BengkelServiceController::class, 'edit'])->name('edit');
-        Route::put('/update/{bengkelService}', [BengkelServiceController::class, 'update'])->name('update');
-        Route::delete('/delete/{bengkelService}', [BengkelServiceController::class, 'destroy'])->name('destroy');
-    });
 });
 
-Route::prefix('service')->as('service.')->group(function () {
+Route::prefix('service')->as('service.')->middleware(['auth', 'role:ADMIN'])->group(function () {
     Route::get('/', [ServiceController::class, 'index'])->name('index');
     Route::get('/create', [ServiceController::class, 'create'])->name('create');
     Route::post('/store', [ServiceController::class, 'store'])->name('store');
@@ -106,12 +100,35 @@ Route::prefix('service')->as('service.')->group(function () {
     Route::delete('/delete/{service}', [ServiceController::class, 'destroy'])->name('destroy');
 });
 
+Route::prefix('admin/bengkel-services')->as('admin.bengkel-services.')->middleware(['auth', 'role:ADMIN'])->group(function () {
+    Route::get('/', [BengkelServiceController::class, 'index'])->name('index');
+    Route::get('/{bengkel}/manage', [BengkelServiceController::class, 'manage'])->name('manage');
+    Route::put('/{bengkel}/update', [BengkelServiceController::class, 'update'])->name('update');
+});
+
 // Public User
 Route::prefix('dashboard/public')->middleware(['auth', 'role:PUBLIC'])->group(function () {
     Route::get('/', fn() => view('dashboard.user.index'));
 });
 
+// Service Requests for Public Users
+Route::prefix('service-requests')->as('service-requests.')->middleware(['auth', 'role:PUBLIC'])->group(function () {
+    Route::get('/bengkels', [ServiceRequestController::class, 'index'])->name('index');
+    Route::get('/bengkels/{bengkel}', [ServiceRequestController::class, 'show'])->name('show');
+    Route::get('/bengkels/{bengkel}/request', [ServiceRequestController::class, 'create'])->name('create');
+    Route::post('/bengkels/{bengkel}/request', [ServiceRequestController::class, 'store'])->name('store');
+    Route::get('/my-requests', [ServiceRequestController::class, 'myRequests'])->name('my-requests');
+    Route::patch('/{serviceRequest}/cancel', [ServiceRequestController::class, 'cancel'])->name('cancel');
+});
+
 // Admin Bengkel
 Route::prefix('dashboard/bengkel')->middleware(['auth', 'role:BENGKEL'])->group(function () {
     Route::get('/', fn() => view('dashboard.bengkel.index'));
+});
+
+// Service Requests for Bengkel
+Route::prefix('bengkel/service-requests')->as('bengkel.service-requests.')->middleware(['auth', 'role:BENGKEL'])->group(function () {
+    Route::get('/', [ServiceRequestController::class, 'bengkelRequests'])->name('index');
+    Route::get('/{serviceRequest}', [ServiceRequestController::class, 'bengkelRequestDetail'])->name('show');
+    Route::patch('/{serviceRequest}/update-status', [ServiceRequestController::class, 'updateStatus'])->name('update-status');
 });

@@ -169,8 +169,11 @@
                       </div>
                       <nav id="mobile-menu">
                           <ul class="main-nav">
-                              <li class="megamenu active">
-                                  <a href="javascript:void(0);">Home</a>
+                              <li class="megamenu {{ Route::is('landing') ? 'active' : '' }}">
+                                  <a href="/">Home</a>
+                              </li>
+                              <li class="megamenu {{ Route::is('bengkels*') ? 'active' : '' }}">
+                                  <a href="{{ route('bengkels.grid') }}">Bengkel</a>
                               </li>
                           </ul>
                       </nav>

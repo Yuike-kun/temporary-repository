@@ -55,4 +55,14 @@ class User extends Authenticatable
     {
         return Storage::disk('public')->url($value);
     }
+
+    public function serviceRequests()
+    {
+        return $this->hasMany(ServiceRequest::class);
+    }
+
+    public function bengkel()
+    {
+        return $this->hasOne(Bengkel::class);
+    }
 }

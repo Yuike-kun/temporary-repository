@@ -75,4 +75,47 @@ class BengkelController extends Controller
         $bengkels = Bengkel::where('is_verified', true)->get();
         return view('bengkel.map.index', compact('bengkels'));
     }
+
+    public function grid(Request $request)
+    {
+        $query = Bengkel::with(['owner', 'bengkelServices'])
+            ->withCount('reviews')
+            ->withAvg('reviews', 'rating');
+
+        if ($request->filled('search')) {
+            $query->where(function($q) use ($request) {
+                $q->where('name', 'like', '%' . $request->search . '%')
+                  ->orWhere('address', 'like', '%' . $request->search . '%');
+            });
+        }
+
+        if ($request->filled('verified')) {
+            $query->where('is_verified', true);
+        }
+
+        if ($request->filled('sort')) {
+            switch ($request->sort) {
+                case 'name':
+                    $query->orderBy('name');
+                    break;
+                case 'newest':
+                    $query->latest();
+                    break;
+                default:
+                    $query->orderBy('id');
+            }
+        } else {
+            $query->orderBy('id');
+        }
+
+        $bengkels = $query->paginate(12)->withQueryString();
+
+        return view('landing.bengkels.grid', compact('bengkels'));
+    }
+
+    public function show(Bengkel $bengkel)
+    {
+        $bengkel->load(['owner', 'bengkelServices.service', 'reviews.user']);
+        return view('landing.bengkels.show', compact('bengkel'));
+    }
 }

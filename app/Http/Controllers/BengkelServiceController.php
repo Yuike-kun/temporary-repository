@@ -2,63 +2,62 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
+use App\Models\Bengkel;
 use App\Models\Service;
+use App\Models\BengkelService;
+use Illuminate\Http\Request;
 
 class BengkelServiceController extends Controller
 {
     public function index()
     {
-        $services = Service::all();
-        return view('service.index', compact('services'));
+        $bengkels = Bengkel::with(['bengkelServices.service', 'owner'])->get();
+        return view('admin.bengkel-services.index', compact('bengkels'));
     }
 
-    public function create()
+    public function manage(Bengkel $bengkel)
     {
-        return view('service.create');
+        $bengkel->load(['bengkelServices.service', 'owner']);
+        $allServices = Service::all();
+        $assignedServiceIds = $bengkel->bengkelServices->pluck('service_id')->toArray();
+        
+        return view('admin.bengkel-services.manage', compact('bengkel', 'allServices', 'assignedServiceIds'));
     }
 
-    public function store(Request $request)
+    public function update(Request $request, Bengkel $bengkel)
     {
-        $validatedData = $request->validate([
-            'name' => 'required|string|max:255',
-            'description' => 'nullable|string',
+        $request->validate([
+            'services' => 'nullable|array',
+            'services.*' => 'exists:services,id',
         ]);
 
-        Service::create($validatedData);
+        $bengkel->bengkelServices()->delete();
 
-        return redirect()->route('service.index')
-            ->with('success', 'Servis berhasil ditambahkan.');
+        if ($request->has('services')) {
+            foreach ($request->services as $serviceId) {
+                BengkelService::create([
+                    'bengkel_id' => $bengkel->id,
+                    'service_id' => $serviceId,
+                ]);
+            }
+        }
+
+        return redirect()->route('admin.bengkel-services.index')
+            ->with('success', 'Layanan bengkel berhasil diperbarui.');
     }
 
-    public function show(Service $service)
+    public function addService(Request $request, Bengkel $bengkel)
     {
-        return view('service.show', compact('service'));
-    }
-
-    public function edit(Service $service)
-    {
-        return view('service.edit', compact('service'));
-    }
-
-    public function update(Request $request, Service $service)
-    {
-        $validatedData = $request->validate([
-            'name' => 'required|string|max:255',
-            'description' => 'nullable|string',
+        $request->validate([
+            'service_id' => 'required|exists:services,id',
         ]);
 
-        $service->update($validatedData);
+        BengkelService::create([
+            'bengkel_id' => $bengkel->id,
+            'service_id' => $request->service_id,
+        ]);
 
-        return redirect()->route('service.index')
-            ->with('success', 'Servis berhasil diperbarui.');
-    }
-
-    public function destroy(Service $service)
-    {
-        $service->delete();
-
-        return redirect()->route('service.index')
-            ->with('success', 'Servis berhasil dihapus.');
+        return redirect()->route('admin.bengkel-services.manage', $bengkel->id)
+            ->with('success', 'Layanan berhasil ditambahkan ke bengkel.');
     }
 }

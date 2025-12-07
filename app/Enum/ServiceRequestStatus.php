@@ -2,11 +2,11 @@
 
 namespace App\Enum;
 
-enum ServiceRequestStatus
+enum ServiceRequestStatus: string
 {
-    case pending;
-    case accepted;
-    case otw;
-    case completed;
-    case cancelled;
+    case pending = 'pending';
+    case accepted = 'accepted';
+    case otw = 'otw';
+    case completed = 'completed';
+    case cancelled = 'cancelled';
 }
