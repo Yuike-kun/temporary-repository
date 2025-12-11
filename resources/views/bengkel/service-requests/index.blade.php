@@ -4,8 +4,17 @@
             <div class="col-12">
                 <div class="card mb-4">
                     <div class="card-header pb-0">
-                        <h6>Permintaan Layanan Masuk</h6>
-                        <p class="text-sm">Kelola permintaan layanan dari pelanggan</p>
+                        <div class="d-flex justify-content-between align-items-center">
+                            <div>
+                                <h6>Permintaan Layanan Masuk</h6>
+                                <p class="text-sm mb-0">Kelola permintaan layanan dari pelanggan</p>
+                            </div>
+                            <div>
+                                <button type="button" class="btn btn-success btn-sm" data-bs-toggle="modal" data-bs-target="#exportModal">
+                                    <i class="fas fa-file-pdf me-1"></i>Export PDF
+                                </button>
+                            </div>
+                        </div>
                     </div>
                     <div class="card-body px-0 pt-0 pb-2">
                         @if (session('success'))
@@ -233,6 +242,49 @@
                         </div>
                     </div>
                 </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Export PDF Modal -->
+    <div class="modal fade" id="exportModal" tabindex="-1" aria-labelledby="exportModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exportModalLabel">Export Laporan ke PDF</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <form action="{{ route('bengkel.service-requests.export-pdf') }}" method="GET">
+                    <div class="modal-body">
+                        <div class="mb-3">
+                            <label class="form-label">Filter Status</label>
+                            <select name="status" class="form-select">
+                                <option value="all">Semua Status</option>
+                                <option value="pending">Menunggu</option>
+                                <option value="accepted">Diterima</option>
+                                <option value="otw">Dalam Perjalanan</option>
+                                <option value="completed">Selesai</option>
+                                <option value="cancelled">Dibatalkan</option>
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Dari Tanggal</label>
+                            <input type="date" name="date_from" class="form-control">
+                            <small class="text-muted">Kosongkan untuk tidak membatasi</small>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Sampai Tanggal</label>
+                            <input type="date" name="date_to" class="form-control">
+                            <small class="text-muted">Kosongkan untuk tidak membatasi</small>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
+                        <button type="submit" class="btn btn-success">
+                            <i class="fas fa-download me-1"></i>Download PDF
+                        </button>
+                    </div>
+                </form>
             </div>
         </div>
     </div>

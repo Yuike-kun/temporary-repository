@@ -7,6 +7,7 @@ use App\Models\ServiceRequest;
 use App\Enum\ServiceRequestStatus;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Barryvdh\DomPDF\Facade\Pdf;
 
 class ServiceRequestController extends Controller
 {
@@ -77,6 +78,64 @@ class ServiceRequestController extends Controller
             ->get();
 
         return view('bengkel.service-requests.index', compact('serviceRequests', 'bengkel'));
+    }
+
+    public function exportPdf(Request $request)
+    {
+        $user = Auth::user();
+        $bengkel = $user->bengkel;
+
+        if (!$bengkel) {
+            return redirect()->back()->with('error', 'Anda tidak memiliki bengkel yang terdaftar.');
+        }
+
+        // Get filter parameters
+        $status = $request->get('status');
+        $dateFrom = $request->get('date_from');
+        $dateTo = $request->get('date_to');
+
+        // Build query
+        $query = ServiceRequest::where('bengkel_id', $bengkel->id)->with('user');
+
+        // Apply filters
+        if ($status && $status !== 'all') {
+            $query->where('status', ServiceRequestStatus::from($status));
+        }
+
+        if ($dateFrom) {
+            $query->whereDate('created_at', '>=', $dateFrom);
+        }
+
+        if ($dateTo) {
+            $query->whereDate('created_at', '<=', $dateTo);
+        }
+
+        $serviceRequests = $query->latest()->get();
+
+        // Calculate statistics
+        $stats = [
+            'total' => $serviceRequests->count(),
+            'pending' => $serviceRequests->where('status', ServiceRequestStatus::pending)->count(),
+            'accepted' => $serviceRequests->where('status', ServiceRequestStatus::accepted)->count(),
+            'otw' => $serviceRequests->where('status', ServiceRequestStatus::otw)->count(),
+            'completed' => $serviceRequests->where('status', ServiceRequestStatus::completed)->count(),
+            'cancelled' => $serviceRequests->where('status', ServiceRequestStatus::cancelled)->count(),
+        ];
+
+        $pdf = Pdf::loadView('bengkel.service-requests.pdf', [
+            'bengkel' => $bengkel,
+            'serviceRequests' => $serviceRequests,
+            'stats' => $stats,
+            'filters' => [
+                'status' => $status,
+                'date_from' => $dateFrom,
+                'date_to' => $dateTo,
+            ]
+        ]);
+
+        $filename = 'Laporan_Permintaan_Layanan_' . $bengkel->name . '_' . now()->format('Y-m-d_His') . '.pdf';
+
+        return $pdf->download($filename);
     }
 
     public function bengkelRequestDetail(ServiceRequest $serviceRequest)

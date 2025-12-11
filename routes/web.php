@@ -111,6 +111,7 @@ Route::prefix('bengkel')->as('bengkel.')->middleware(['auth', 'role:ADMIN'])->gr
 // bengkel/service-requests (BENGKEL)
 Route::prefix('bengkel/service-requests')->as('bengkel.service-requests.')->middleware(['auth', 'role:BENGKEL'])->group(function () {
     Route::get('/', [ServiceRequestController::class, 'bengkelRequests'])->name('index');
+    Route::get('/export-pdf', [ServiceRequestController::class, 'exportPdf'])->name('export-pdf');
     Route::get('/{serviceRequest}', [ServiceRequestController::class, 'bengkelRequestDetail'])->name('show');
     Route::patch('/{serviceRequest}/update-status', [ServiceRequestController::class, 'updateStatus'])->name('update-status');
 });
