@@ -14,6 +14,7 @@ use App\Http\Controllers\BengkelServiceController;
 use App\Http\Controllers\BengkelOwnServiceController;
 use App\Http\Controllers\BengkelProfileController;
 use App\Http\Controllers\ServiceRequestController;
+use App\Http\Controllers\UserProfileController;
 
 // Authentication
 Route::middleware('guest')->group(function () {
@@ -127,6 +128,12 @@ Route::prefix('dashboard/bengkel')->middleware(['auth', 'role:BENGKEL'])->group(
 // dashboard/public (PUBLIC)
 Route::prefix('dashboard/public')->middleware(['auth', 'role:PUBLIC'])->group(function () {
     Route::get('/', fn() => view('dashboard.user.index'));
+});
+
+// my-account (PUBLIC)
+Route::prefix('my-account')->as('my-account.')->middleware(['auth', 'role:PUBLIC'])->group(function () {
+    Route::get('/profile', [UserProfileController::class, 'edit'])->name('profile');
+    Route::put('/profile', [UserProfileController::class, 'update'])->name('update');
 });
 
 // my-bengkel (BENGKEL)

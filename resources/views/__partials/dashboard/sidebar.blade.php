@@ -30,34 +30,31 @@
                     </a>
                 </li>
                 <li>
-                    <div class="message-content">
-                        <a class="d-flex align-items-center" href="chat.html">
-                            <i class="isax isax-danger"></i> Reuqest Darurat
-                        </a>
-                        <span class="msg-count bg-danger rounded-circle">02</span>
-                    </div>
-                </li>
-                <li>
-                    <a class="d-flex align-items-center" href="{{ route('dashboard') }}">
-                        <i class="isax isax-clock me-2"></i>History
+                    <a class="d-flex align-items-center" href="{{ route('service-requests.index') }}">
+                        <i class="isax isax-danger me-2"></i>Request Darurat
                     </a>
                 </li>
                 <li>
-                    <a class="d-flex align-items-center" href="{{ route('dashboard') }}">
-                        <i class="isax isax-building me-2"></i>Reviews
+                    <a class="d-flex align-items-center" href="{{ route('service-requests.my-requests') }}">
+                        <i class="isax isax-clock me-2"></i>Riwayat Permintaan
                     </a>
                 </li>
                 <li>
-                    <a class="d-flex align-items-center" href="{{ route('dashboard') }}">
-                        <i class="isax isax-user me-2"></i>Account
+                    <a class="d-flex align-items-center" href="{{ route('bengkels.grid') }}">
+                        <i class="isax isax-building me-2"></i>Daftar Bengkel
+                    </a>
+                </li>
+                <li>
+                    <a class="d-flex align-items-center" href="{{ route('my-account.profile') }}">
+                        <i class="isax isax-user me-2"></i>Akun Saya
                     </a>
                 </li>
 
-    <li class="logout-link">
-        <a href="{{ route('logout') }}" class="d-flex align-items-center pb-0">
-            <i class="isax isax-logout-1 me-2"></i>Logout
-        </a>
-    </li>
+                <li class="logout-link">
+                    <a href="{{ route('logout') }}" class="d-flex align-items-center pb-0">
+                        <i class="isax isax-logout-1 me-2"></i>Logout
+                    </a>
+                </li>
 
             </ul>
         </div>
