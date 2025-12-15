@@ -9,7 +9,7 @@
 {{-- Laporan --}}
 <x-nav-title title="Laporan" />
 <x-nav-item
-    {{-- href="{{ route('laporan.darurat') }}" --}}
+    href="{{ route('admin.laporan.darurat') }}"
     title="Laporan Darurat"
     icon="alert-triangle"
 />

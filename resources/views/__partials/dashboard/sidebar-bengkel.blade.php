@@ -39,18 +39,6 @@
                  </li>
 
                  <li>
-                     <a href="{{ route('my-bengkel.history.index') }}" class="d-flex align-items-center">
-                         <i class="isax isax-clock me-2"></i>History
-                     </a>
-                 </li>
-
-                 <li>
-                     <a href="#" class="d-flex align-items-center">
-                         <i class="isax isax-building me-2"></i>Bengkel
-                     </a>
-                 </li>
-
-                 <li>
                      <a href="{{ route('my-bengkel.services.index') }}" class="d-flex align-items-center">
                          <i class="isax isax-setting-2 me-2"></i>Service
                      </a>

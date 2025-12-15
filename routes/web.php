@@ -15,6 +15,7 @@ use App\Http\Controllers\BengkelOwnServiceController;
 use App\Http\Controllers\BengkelProfileController;
 use App\Http\Controllers\ServiceRequestController;
 use App\Http\Controllers\UserProfileController;
+use App\Http\Controllers\AdminReportController;
 
 // Authentication
 Route::middleware('guest')->group(function () {
@@ -53,6 +54,13 @@ Route::prefix('admin/bengkel-services')->as('admin.bengkel-services.')->middlewa
     Route::get('/', [BengkelServiceController::class, 'index'])->name('index');
     Route::get('/{bengkel}/manage', [BengkelServiceController::class, 'manage'])->name('manage');
     Route::put('/{bengkel}/update', [BengkelServiceController::class, 'update'])->name('update');
+});
+
+// admin/laporan (ADMIN)
+Route::prefix('admin/laporan')->as('admin.laporan.')->middleware(['auth', 'role:ADMIN'])->group(function () {
+    Route::get('/darurat', [AdminReportController::class, 'index'])->name('darurat');
+    Route::get('/darurat/export-pdf', [AdminReportController::class, 'exportPdf'])->name('darurat.export-pdf');
+    Route::get('/darurat/export-excel', [AdminReportController::class, 'exportExcel'])->name('darurat.export-excel');
 });
 
 // akun/admin (ADMIN)
