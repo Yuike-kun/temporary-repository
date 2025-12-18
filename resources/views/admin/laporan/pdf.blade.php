@@ -193,6 +193,12 @@
             <span>{{ \Carbon\Carbon::parse($filters['date_to'])->format('d F Y') }}</span>
         </div>
         @endif
+        @if($filters['year'])
+        <div class="info-row">
+            <span class="info-label">Tahun:</span>
+            <span>{{ \Carbon\Carbon::parse($filters['year'])->format('Y') }}</span>
+        </div>
+        @endif
     </div>
 
     <div class="stats-grid">

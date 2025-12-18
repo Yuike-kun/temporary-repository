@@ -10,7 +10,8 @@
                                 <p class="text-sm mb-0">Kelola permintaan layanan dari pelanggan</p>
                             </div>
                             <div>
-                                <button type="button" class="btn btn-success btn-sm" data-bs-toggle="modal" data-bs-target="#exportModal">
+                                <button type="button" class="btn btn-success btn-sm" data-bs-toggle="modal"
+                                    data-bs-target="#exportModal">
                                     Export PDF
                                 </button>
                             </div>
@@ -39,33 +40,42 @@
                                     <!-- Search Filter -->
                                     <div class="col-md-4">
                                         <div class="input-group">
-                                            <input type="text" name="search" id="searchInput" class="form-control" 
-                                                   placeholder="Cari pelanggan atau masalah..." 
-                                                   value="{{ request('search') }}">
+                                            <input type="text" name="search" id="searchInput" class="form-control"
+                                                placeholder="Cari pelanggan atau masalah..."
+                                                value="{{ request('search') }}">
                                         </div>
                                     </div>
 
                                     <!-- Date From Filter -->
                                     <div class="col-md-3">
-                                        <input type="date" name="date_from" id="dateFrom" class="form-control" 
-                                               placeholder="Dari Tanggal" 
-                                               value="{{ request('date_from') }}">
+                                        <input type="date" name="date_from" id="dateFrom" class="form-control"
+                                            placeholder="Dari Tanggal" value="{{ request('date_from') }}">
                                     </div>
 
                                     <!-- Date To Filter -->
                                     <div class="col-md-3">
-                                        <input type="date" name="date_to" id="dateTo" class="form-control" 
-                                               placeholder="Sampai Tanggal" 
-                                               value="{{ request('date_to') }}">
+                                        <input type="date" name="date_to" id="dateTo" class="form-control"
+                                            placeholder="Sampai Tanggal" value="{{ request('date_to') }}">
                                     </div>
 
                                     <!-- Sort Filter -->
                                     <div class="col-md-2">
-                                        <select name="sort_by" id="sortBy" class="form-select" onchange="this.form.submit()">
-                                            <option value="newest" {{ request('sort_by') == 'newest' ? 'selected' : '' }}>Terbaru</option>
-                                            <option value="oldest" {{ request('sort_by') == 'oldest' ? 'selected' : '' }}>Terlama</option>
-                                            <option value="customer" {{ request('sort_by') == 'customer' ? 'selected' : '' }}>Nama Pelanggan</option>
+                                        <select name="sort_by" id="sortBy" class="form-select"
+                                            onchange="this.form.submit()">
+                                            <option value="newest"
+                                                {{ request('sort_by') == 'newest' ? 'selected' : '' }}>Terbaru</option>
+                                            <option value="oldest"
+                                                {{ request('sort_by') == 'oldest' ? 'selected' : '' }}>Terlama</option>
+                                            <option value="customer"
+                                                {{ request('sort_by') == 'customer' ? 'selected' : '' }}>Nama Pelanggan
+                                            </option>
                                         </select>
+                                    </div>
+
+                                    <div class="col-md-2">
+                                        <input type="number" name="year" id="year" class="form-control"
+                                            max="{{ now()->format('Y') }}" placeholder="{{ now()->format('Y') }}"
+                                            value="{{ request('year') }}">
                                     </div>
                                 </div>
 
@@ -75,7 +85,8 @@
                                         <button type="submit" class="btn btn-primary btn-sm">
                                             Terapkan Filter
                                         </button>
-                                        <a href="{{ route('bengkel.service-requests.index') }}" class="btn btn-secondary btn-sm">
+                                        <a href="{{ route('bengkel.service-requests.index') }}"
+                                            class="btn btn-secondary btn-sm">
                                             Reset
                                         </a>
                                     </div>
@@ -83,45 +94,46 @@
                             </div>
 
                             <!-- Hidden status input -->
-                            <input type="hidden" name="status" id="statusInput" value="{{ request('status', 'all') }}">
+                            <input type="hidden" name="status" id="statusInput"
+                                value="{{ request('status', 'all') }}">
                         </form>
 
                         <!-- Status Filter Pills -->
                         <div class="px-4 mb-3">
                             <ul class="nav nav-pills" id="statusFilter" role="tablist">
                                 <li class="nav-item" role="presentation">
-                                    <button class="nav-link {{ request('status', 'all') == 'all' ? 'active' : '' }}" 
-                                            type="button" onclick="filterByStatus('all')">
+                                    <button class="nav-link {{ request('status', 'all') == 'all' ? 'active' : '' }}"
+                                        type="button" onclick="filterByStatus('all')">
                                         Semua
                                     </button>
                                 </li>
                                 <li class="nav-item" role="presentation">
-                                    <button class="nav-link {{ request('status') == 'pending' ? 'active' : '' }}" 
-                                            type="button" onclick="filterByStatus('pending')">
+                                    <button class="nav-link {{ request('status') == 'pending' ? 'active' : '' }}"
+                                        type="button" onclick="filterByStatus('pending')">
                                         Menunggu
                                     </button>
                                 </li>
                                 <li class="nav-item" role="presentation">
-                                    <button class="nav-link {{ request('status') == 'accepted' ? 'active' : '' }}" 
-                                            type="button" onclick="filterByStatus('accepted')">
+                                    <button class="nav-link {{ request('status') == 'accepted' ? 'active' : '' }}"
+                                        type="button" onclick="filterByStatus('accepted')">
                                         Diterima
                                     </button>
                                 </li>
                                 <li class="nav-item" role="presentation">
-                                    <button class="nav-link {{ request('status') == 'otw' ? 'active' : '' }}" 
-                                            type="button" onclick="filterByStatus('otw')">
+                                    <button class="nav-link {{ request('status') == 'otw' ? 'active' : '' }}"
+                                        type="button" onclick="filterByStatus('otw')">
                                         Dalam Perjalanan
                                     </button>
                                 </li>
                                 <li class="nav-item" role="presentation">
-                                    <button class="nav-link {{ request('status') == 'completed' ? 'active' : '' }}" 
-                                            type="button" onclick="filterByStatus('completed')">
+                                    <button class="nav-link {{ request('status') == 'completed' ? 'active' : '' }}"
+                                        type="button" onclick="filterByStatus('completed')">
                                         Selesai
                                     </button>
                                 </li>
                                 <li class="nav-item" role="presentation">
-                                    <button class="nav-link {{ request('status') == 'cancelled' ? 'active' : '' }}" 
-                                            type="button" onclick="filterByStatus('cancelled')">
+                                    <button class="nav-link {{ request('status') == 'cancelled' ? 'active' : '' }}"
+                                        type="button" onclick="filterByStatus('cancelled')">
                                         Dibatalkan
                                     </button>
                                 </li>
@@ -131,8 +143,8 @@
                         <!-- Results Counter -->
                         <div class="px-4 mb-2">
                             <small class="text-muted">
-                                Menampilkan <strong>{{ $serviceRequests->count() }}</strong> 
-                                @if(request()->hasAny(['status', 'search', 'date_from', 'date_to']))
+                                Menampilkan <strong>{{ $serviceRequests->count() }}</strong>
+                                @if (request()->hasAny(['status', 'search', 'date_from', 'date_to']))
                                     dari <strong>{{ $bengkel->serviceRequests->count() }}</strong>
                                 @endif
                                 permintaan
@@ -143,17 +155,13 @@
                             <table class="table align-items-center mb-0" id="requestsTable">
                                 <thead>
                                     <tr>
-                                        <th
-                                            class="text-uppercase  text-xxs font-weight-bolder opacity-7 ps-2">
+                                        <th class="text-uppercase  text-xxs font-weight-bolder opacity-7 ps-2">
                                             Pelanggan</th>
-                                        <th
-                                            class="text-uppercase  text-xxs font-weight-bolder opacity-7 ps-2">
+                                        <th class="text-uppercase  text-xxs font-weight-bolder opacity-7 ps-2">
                                             Masalah</th>
-                                        <th
-                                            class="text-uppercase  text-xxs font-weight-bolder opacity-7 ps-2">
+                                        <th class="text-uppercase  text-xxs font-weight-bolder opacity-7 ps-2">
                                             Status</th>
-                                        <th
-                                            class="text-uppercase  text-xxs font-weight-bolder opacity-7 ps-2">
+                                        <th class="text-uppercase  text-xxs font-weight-bolder opacity-7 ps-2">
                                             Tanggal</th>
                                         <th class=" opacity-7"></th>
                                     </tr>
@@ -164,11 +172,13 @@
                                             <td>
                                                 <div class="d-flex flex-column">
                                                     <h6 class="mb-0 text-sm">{{ $request->user->name }}</h6>
-                                                    <p class="text-xs text-secondary mb-0">{{ $request->user->email }}</p>
+                                                    <p class="text-xs text-secondary mb-0">{{ $request->user->email }}
+                                                    </p>
                                                 </div>
                                             </td>
                                             <td>
-                                                <p class="text-xs mb-0">{{ Str::limit($request->description, 60) }}</p>
+                                                <p class="text-xs mb-0">{{ Str::limit($request->description, 60) }}
+                                                </p>
                                             </td>
                                             <td>
                                                 @php
@@ -186,14 +196,21 @@
                                                         'completed' => 'Selesai',
                                                         'cancelled' => 'Dibatalkan',
                                                     ];
-                                                    $statusColor = $statusColors[$request->status->name] ?? 'bg-gradient-secondary';
-                                                    $statusLabel = $statusLabels[$request->status->name] ?? ucfirst($request->status->name);
+                                                    $statusColor =
+                                                        $statusColors[$request->status->name] ??
+                                                        'bg-gradient-secondary';
+                                                    $statusLabel =
+                                                        $statusLabels[$request->status->name] ??
+                                                        ucfirst($request->status->name);
                                                 @endphp
-                                                <span class="badge badge-sm {{ $statusColor }}">{{ $statusLabel }}</span>
+                                                <span
+                                                    class="badge badge-sm {{ $statusColor }}">{{ $statusLabel }}</span>
                                             </td>
                                             <td>
-                                                <p class="text-xs font-weight-bold mb-0">{{ $request->created_at->format('d M Y') }}</p>
-                                                <p class="text-xs text-secondary mb-0">{{ $request->created_at->format('H:i') }}</p>
+                                                <p class="text-xs font-weight-bold mb-0">
+                                                    {{ $request->created_at->format('d M Y') }}</p>
+                                                <p class="text-xs text-secondary mb-0">
+                                                    {{ $request->created_at->format('H:i') }}</p>
                                             </td>
                                             <td class="align-middle">
                                                 <a href="{{ route('bengkel.service-requests.show', $request) }}"
@@ -206,7 +223,7 @@
                                         <tr>
                                             <td colspan="5" class="text-center py-4">
                                                 <p class="text-secondary mb-0">
-                                                    @if(request()->hasAny(['status', 'search', 'date_from', 'date_to']))
+                                                    @if (request()->hasAny(['status', 'search', 'date_from', 'date_to']))
                                                         Tidak ada permintaan layanan yang sesuai dengan filter.
                                                     @else
                                                         Belum ada permintaan layanan.
@@ -340,6 +357,12 @@
                         <div class="mb-3">
                             <label class="form-label">Sampai Tanggal</label>
                             <input type="date" name="date_to" class="form-control">
+                            <small class="text-muted">Kosongkan untuk tidak membatasi</small>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Tahun</label>
+                            <input type="number" name="year" class="form-control"
+                                max="{{ now()->format('Y') }}" placeholder="{{ now()->format('Y') }}">
                             <small class="text-muted">Kosongkan untuk tidak membatasi</small>
                         </div>
                     </div>

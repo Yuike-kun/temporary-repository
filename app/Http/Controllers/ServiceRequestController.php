@@ -101,6 +101,10 @@ class ServiceRequestController extends Controller
             $query->whereDate('created_at', '<=', $request->date_to);
         }
 
+        if($request->filled('year')) {
+            $query->whereYear('created_at', $request->year);
+        }
+
         // Apply sorting
         $sortBy = $request->get('sort_by', 'newest');
         switch ($sortBy) {
@@ -156,6 +160,7 @@ class ServiceRequestController extends Controller
         $status = $request->get('status');
         $dateFrom = $request->get('date_from');
         $dateTo = $request->get('date_to');
+        $year = $request->get('year');
 
         // Build query
         $query = ServiceRequest::where('bengkel_id', $bengkel->id)->with('user');
@@ -171,6 +176,10 @@ class ServiceRequestController extends Controller
 
         if ($dateTo) {
             $query->whereDate('created_at', '<=', $dateTo);
+        }
+
+        if ($year) {
+            $query->whereYear('created_at', $year);
         }
 
         $serviceRequests = $query->latest()->get();
@@ -193,6 +202,7 @@ class ServiceRequestController extends Controller
                 'status' => $status,
                 'date_from' => $dateFrom,
                 'date_to' => $dateTo,
+                'year' => $year,
             ]
         ]);
 

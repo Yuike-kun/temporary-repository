@@ -9,10 +9,12 @@
                         <p class="text-sm mb-0 text-muted">Monitor permintaan layanan darurat</p>
                     </div>
                     <div>
-                        <button type="button" class="btn btn-outline-dark btn-sm me-2" data-bs-toggle="modal" data-bs-target="#exportExcelModal">
+                        <button type="button" class="btn btn-outline-dark btn-sm me-2" data-bs-toggle="modal"
+                            data-bs-target="#exportExcelModal">
                             Excel
                         </button>
-                        <button type="button" class="btn btn-outline-dark btn-sm" data-bs-toggle="modal" data-bs-target="#exportPdfModal">
+                        <button type="button" class="btn btn-outline-dark btn-sm" data-bs-toggle="modal"
+                            data-bs-target="#exportPdfModal">
                             PDF
                         </button>
                     </div>
@@ -80,40 +82,49 @@
                         <form method="GET" action="{{ route('admin.laporan.darurat') }}">
                             <div class="row g-2 align-items-end">
                                 <div class="col-md-3">
-                                    <input type="text" name="search" class="form-control form-control-sm" 
-                                           placeholder="Cari nama, email, bengkel..." value="{{ request('search') }}">
+                                    <input type="text" name="search" class="form-control form-control-sm"
+                                        placeholder="Cari nama, email, bengkel..." value="{{ request('search') }}">
                                 </div>
                                 <div class="col-md-2">
                                     <select name="status" class="form-select form-select-sm">
-                                        <option value="all" {{ request('status') == 'all' ? 'selected' : '' }}>Semua Status</option>
-                                        <option value="pending" {{ request('status') == 'pending' ? 'selected' : '' }}>Menunggu</option>
-                                        <option value="accepted" {{ request('status') == 'accepted' ? 'selected' : '' }}>Diterima</option>
-                                        <option value="otw" {{ request('status') == 'otw' ? 'selected' : '' }}>Dalam Perjalanan</option>
-                                        <option value="completed" {{ request('status') == 'completed' ? 'selected' : '' }}>Selesai</option>
-                                        <option value="cancelled" {{ request('status') == 'cancelled' ? 'selected' : '' }}>Dibatalkan</option>
+                                        <option value="all" {{ request('status') == 'all' ? 'selected' : '' }}>Semua
+                                            Status</option>
+                                        <option value="pending" {{ request('status') == 'pending' ? 'selected' : '' }}>
+                                            Menunggu</option>
+                                        <option value="accepted"
+                                            {{ request('status') == 'accepted' ? 'selected' : '' }}>Diterima</option>
+                                        <option value="otw" {{ request('status') == 'otw' ? 'selected' : '' }}>Dalam
+                                            Perjalanan</option>
+                                        <option value="completed"
+                                            {{ request('status') == 'completed' ? 'selected' : '' }}>Selesai</option>
+                                        <option value="cancelled"
+                                            {{ request('status') == 'cancelled' ? 'selected' : '' }}>Dibatalkan
+                                        </option>
                                     </select>
                                 </div>
                                 <div class="col-md-2">
                                     <select name="bengkel_id" class="form-select form-select-sm">
                                         <option value="">Semua Bengkel</option>
-                                        @foreach($bengkels as $bengkel)
-                                            <option value="{{ $bengkel->id }}" {{ request('bengkel_id') == $bengkel->id ? 'selected' : '' }}>
+                                        @foreach ($bengkels as $bengkel)
+                                            <option value="{{ $bengkel->id }}"
+                                                {{ request('bengkel_id') == $bengkel->id ? 'selected' : '' }}>
                                                 {{ $bengkel->name }}
                                             </option>
                                         @endforeach
                                     </select>
                                 </div>
                                 <div class="col-md-2">
-                                    <input type="date" name="date_from" class="form-control form-control-sm" 
-                                           placeholder="Dari" value="{{ request('date_from') }}">
+                                    <input type="date" name="date_from" class="form-control form-control-sm"
+                                        placeholder="Dari" value="{{ request('date_from') }}">
                                 </div>
                                 <div class="col-md-2">
-                                    <input type="date" name="date_to" class="form-control form-control-sm" 
-                                           placeholder="Sampai" value="{{ request('date_to') }}">
+                                    <input type="date" name="date_to" class="form-control form-control-sm"
+                                        placeholder="Sampai" value="{{ request('date_to') }}">
                                 </div>
                                 <div class="col-md-2">
-                                    <input type="number" name="year" class="form-control form-control-sm" 
-                                           placeholder="{{ now()->format("Y") }}" value="{{ request('year') }}" min="2000" max="{{ now()->format("Y") }}">
+                                    <input type="number" name="year" class="form-control form-control-sm"
+                                        placeholder="{{ now()->format('Y') }}" value="{{ request('year') }}"
+                                        min="2000" max="{{ now()->format('Y') }}">
                                 </div>
                                 <div class="col-md-1">
                                     <button type="submit" class="btn btn-dark btn-sm w-100">Filter</button>
@@ -158,7 +169,8 @@
                                             <td>
                                                 <div>
                                                     <p class="text-sm mb-0 fw-bold">{{ $request->bengkel->name }}</p>
-                                                    <p class="text-xs text-muted mb-0">{{ $request->bengkel->phone }}</p>
+                                                    <p class="text-xs text-muted mb-0">{{ $request->bengkel->phone }}
+                                                    </p>
                                                 </div>
                                             </td>
                                             <td>
@@ -168,7 +180,8 @@
                                             </td>
                                             <td>
                                                 <p class="text-xs mb-0">
-                                                    {{ number_format($request->latitude, 4) }}, {{ number_format($request->longitude, 4) }}
+                                                    {{ number_format($request->latitude, 4) }},
+                                                    {{ number_format($request->longitude, 4) }}
                                                 </p>
                                             </td>
                                             <td class="text-center">
@@ -178,16 +191,25 @@
                                                         'accepted' => ['color' => 'info', 'label' => 'Diterima'],
                                                         'otw' => ['color' => 'primary', 'label' => 'Perjalanan'],
                                                         'completed' => ['color' => 'success', 'label' => 'Selesai'],
-                                                        'cancelled' => ['color' => 'secondary', 'label' => 'Dibatalkan'],
+                                                        'cancelled' => [
+                                                            'color' => 'secondary',
+                                                            'label' => 'Dibatalkan',
+                                                        ],
                                                     ];
-                                                    $config = $statusConfig[$request->status->name] ?? ['color' => 'secondary', 'label' => ucfirst($request->status->name)];
+                                                    $config = $statusConfig[$request->status->name] ?? [
+                                                        'color' => 'secondary',
+                                                        'label' => ucfirst($request->status->name),
+                                                    ];
                                                 @endphp
-                                                <span class="badge bg-{{ $config['color'] }} text-white">{{ $config['label'] }}</span>
+                                                <span
+                                                    class="badge bg-{{ $config['color'] }} text-white">{{ $config['label'] }}</span>
                                             </td>
                                             <td>
                                                 <div>
-                                                    <p class="text-xs mb-0 fw-bold">{{ $request->created_at->format('d M Y') }}</p>
-                                                    <p class="text-xs text-muted mb-0">{{ $request->created_at->format('H:i') }}</p>
+                                                    <p class="text-xs mb-0 fw-bold">
+                                                        {{ $request->created_at->format('d M Y') }}</p>
+                                                    <p class="text-xs text-muted mb-0">
+                                                        {{ $request->created_at->format('H:i') }}</p>
                                                 </div>
                                             </td>
                                         </tr>
@@ -203,15 +225,16 @@
                         </div>
 
                         <!-- Pagination -->
-                        @if($serviceRequests->hasPages())
-                        <div class="px-3 py-2 bg-light border-top">
-                            <div class="d-flex justify-content-between align-items-center">
-                                <small class="text-muted">
-                                    {{ $serviceRequests->firstItem() ?? 0 }} - {{ $serviceRequests->lastItem() ?? 0 }} dari {{ $serviceRequests->total() }}
-                                </small>
-                                {{ $serviceRequests->links() }}
+                        @if ($serviceRequests->hasPages())
+                            <div class="px-3 py-2 bg-light border-top">
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <small class="text-muted">
+                                        {{ $serviceRequests->firstItem() ?? 0 }} -
+                                        {{ $serviceRequests->lastItem() ?? 0 }} dari {{ $serviceRequests->total() }}
+                                    </small>
+                                    {{ $serviceRequests->links() }}
+                                </div>
                             </div>
-                        </div>
                         @endif
                     </div>
                 </div>
@@ -220,7 +243,8 @@
     </div>
 
     <!-- Export PDF Modal -->
-    <div class="modal fade" id="exportPdfModal" tabindex="-1" aria-labelledby="exportPdfModalLabel" aria-hidden="true">
+    <div class="modal fade" id="exportPdfModal" tabindex="-1" aria-labelledby="exportPdfModalLabel"
+        aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
                 <div class="modal-header">
@@ -244,7 +268,7 @@
                             <label class="form-label text-xs fw-bold">Bengkel</label>
                             <select name="bengkel_id" class="form-select form-select-sm">
                                 <option value="">Semua Bengkel</option>
-                                @foreach($bengkels as $bengkel)
+                                @foreach ($bengkels as $bengkel)
                                     <option value="{{ $bengkel->id }}">{{ $bengkel->name }}</option>
                                 @endforeach
                             </select>
@@ -258,10 +282,17 @@
                                 <label class="form-label text-xs fw-bold">Sampai</label>
                                 <input type="date" name="date_to" class="form-control form-control-sm">
                             </div>
+                            <div class="col-12 mb-3">
+                                <label class="form-label text-xs fw-bold">Tahun</label>
+                                <input type="number" name="year" class="form-control form-control-sm"
+                                    placeholder="{{ now()->format('Y') }}" value="{{ request('year') }}"
+                                    min="2000" max="{{ now()->format('Y') }}">
+                            </div>
                         </div>
                     </div>
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-sm btn-secondary" data-bs-dismiss="modal">Batal</button>
+                        <button type="button" class="btn btn-sm btn-secondary"
+                            data-bs-dismiss="modal">Batal</button>
                         <button type="submit" class="btn btn-sm btn-dark">Download</button>
                     </div>
                 </form>
@@ -270,7 +301,8 @@
     </div>
 
     <!-- Export Excel Modal -->
-    <div class="modal fade" id="exportExcelModal" tabindex="-1" aria-labelledby="exportExcelModalLabel" aria-hidden="true">
+    <div class="modal fade" id="exportExcelModal" tabindex="-1" aria-labelledby="exportExcelModalLabel"
+        aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
                 <div class="modal-header">
@@ -294,7 +326,7 @@
                             <label class="form-label text-xs fw-bold">Bengkel</label>
                             <select name="bengkel_id" class="form-select form-select-sm">
                                 <option value="">Semua Bengkel</option>
-                                @foreach($bengkels as $bengkel)
+                                @foreach ($bengkels as $bengkel)
                                     <option value="{{ $bengkel->id }}">{{ $bengkel->name }}</option>
                                 @endforeach
                             </select>
@@ -308,10 +340,17 @@
                                 <label class="form-label text-xs fw-bold">Sampai</label>
                                 <input type="date" name="date_to" class="form-control form-control-sm">
                             </div>
+                            <div class="col-12 mb-3">
+                                <label class="form-label text-xs fw-bold">Tahun</label>
+                                <input type="number" name="year" class="form-control form-control-sm"
+                                    placeholder="{{ now()->format('Y') }}" value="{{ request('year') }}"
+                                    min="2000" max="{{ now()->format('Y') }}">
+                            </div>
                         </div>
                     </div>
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-sm btn-secondary" data-bs-dismiss="modal">Batal</button>
+                        <button type="button" class="btn btn-sm btn-secondary"
+                            data-bs-dismiss="modal">Batal</button>
                         <button type="submit" class="btn btn-sm btn-dark">Download</button>
                     </div>
                 </form>
@@ -320,39 +359,40 @@
     </div>
 
     @push('styles')
-    <style>
-        .admin-report-black,
-        .admin-report-black * {
-            color: #000 !important;
-        }
-        
-        .card {
-            border-radius: 8px;
-        }
-        
-        .table tbody tr {
-            border-bottom: 1px solid #f1f1f1;
-        }
-        
-        .table tbody tr:hover {
-            background-color: #f8f9fa;
-        }
-        
-        .badge {
-            padding: 4px 10px;
-            font-weight: 500;
-            font-size: 11px;
-        }
-        
-        .form-control, .form-select {
-            border: 1px solid #dee2e6;
-            border-radius: 6px;
-        }
-        
-        .btn {
-            border-radius: 6px;
-            font-weight: 500;
-        }
-    </style>
+        <style>
+            .admin-report-black,
+            .admin-report-black * {
+                color: #000 !important;
+            }
+
+            .card {
+                border-radius: 8px;
+            }
+
+            .table tbody tr {
+                border-bottom: 1px solid #f1f1f1;
+            }
+
+            .table tbody tr:hover {
+                background-color: #f8f9fa;
+            }
+
+            .badge {
+                padding: 4px 10px;
+                font-weight: 500;
+                font-size: 11px;
+            }
+
+            .form-control,
+            .form-select {
+                border: 1px solid #dee2e6;
+                border-radius: 6px;
+            }
+
+            .btn {
+                border-radius: 6px;
+                font-weight: 500;
+            }
+        </style>
     @endpush
 </x-layout.dashboard-admin>
