@@ -14,10 +14,12 @@ class ServiceRequest extends Model
         'latitude',
         'longitude',
         'status',
+        'is_emergency',
     ];
 
     protected $casts = [
         'status' => ServiceRequestStatus::class,
+        'is_emergency' => 'boolean',
     ];
 
     public function bengkel()

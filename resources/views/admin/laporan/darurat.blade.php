@@ -111,6 +111,10 @@
                                     <input type="date" name="date_to" class="form-control form-control-sm" 
                                            placeholder="Sampai" value="{{ request('date_to') }}">
                                 </div>
+                                <div class="col-md-2">
+                                    <input type="number" name="year" class="form-control form-control-sm" 
+                                           placeholder="{{ now()->format("Y") }}" value="{{ request('year') }}" min="2000" max="{{ now()->format("Y") }}">
+                                </div>
                                 <div class="col-md-1">
                                     <button type="submit" class="btn btn-dark btn-sm w-100">Filter</button>
                                 </div>

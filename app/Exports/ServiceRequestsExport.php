@@ -47,6 +47,10 @@ class ServiceRequestsExport implements FromCollection, WithHeadings, WithMapping
             $query->whereDate('created_at', '<=', $this->filters['date_to']);
         }
 
+        if (!empty($this->filters['year'])) {
+            $query->whereYear('created_at', $this->filters['year']);
+        }
+
         return $query->latest()->get();
     }
 

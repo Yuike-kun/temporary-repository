@@ -3,7 +3,7 @@
         <div class="row">
             <div class="col-12">
                 <div class="card mb-4">
-                    <div class="card-header pb-0">
+                    <div class="card-header border-0">
                         <div class="d-flex justify-content-between align-items-center">
                             <div>
                                 <h6>Permintaan Layanan Masuk</h6>
@@ -11,7 +11,7 @@
                             </div>
                             <div>
                                 <button type="button" class="btn btn-success btn-sm" data-bs-toggle="modal" data-bs-target="#exportModal">
-                                    <i class="fas fa-file-pdf me-1"></i>Export PDF
+                                    Export PDF
                                 </button>
                             </div>
                         </div>
@@ -32,73 +32,139 @@
                             </div>
                         @endif
 
+                        <!-- Advanced Filters -->
+                        <form method="GET" action="{{ route('bengkel.service-requests.index') }}" id="filterForm">
+                            <div class="px-4 mb-3">
+                                <div class="row g-3">
+                                    <!-- Search Filter -->
+                                    <div class="col-md-4">
+                                        <div class="input-group">
+                                            <input type="text" name="search" id="searchInput" class="form-control" 
+                                                   placeholder="Cari pelanggan atau masalah..." 
+                                                   value="{{ request('search') }}">
+                                        </div>
+                                    </div>
+
+                                    <!-- Date From Filter -->
+                                    <div class="col-md-3">
+                                        <input type="date" name="date_from" id="dateFrom" class="form-control" 
+                                               placeholder="Dari Tanggal" 
+                                               value="{{ request('date_from') }}">
+                                    </div>
+
+                                    <!-- Date To Filter -->
+                                    <div class="col-md-3">
+                                        <input type="date" name="date_to" id="dateTo" class="form-control" 
+                                               placeholder="Sampai Tanggal" 
+                                               value="{{ request('date_to') }}">
+                                    </div>
+
+                                    <!-- Sort Filter -->
+                                    <div class="col-md-2">
+                                        <select name="sort_by" id="sortBy" class="form-select" onchange="this.form.submit()">
+                                            <option value="newest" {{ request('sort_by') == 'newest' ? 'selected' : '' }}>Terbaru</option>
+                                            <option value="oldest" {{ request('sort_by') == 'oldest' ? 'selected' : '' }}>Terlama</option>
+                                            <option value="customer" {{ request('sort_by') == 'customer' ? 'selected' : '' }}>Nama Pelanggan</option>
+                                        </select>
+                                    </div>
+                                </div>
+
+                                <!-- Filter Actions -->
+                                <div class="row mt-3">
+                                    <div class="col-12">
+                                        <button type="submit" class="btn btn-primary btn-sm">
+                                            Terapkan Filter
+                                        </button>
+                                        <a href="{{ route('bengkel.service-requests.index') }}" class="btn btn-secondary btn-sm">
+                                            Reset
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Hidden status input -->
+                            <input type="hidden" name="status" id="statusInput" value="{{ request('status', 'all') }}">
+                        </form>
+
+                        <!-- Status Filter Pills -->
                         <div class="px-4 mb-3">
                             <ul class="nav nav-pills" id="statusFilter" role="tablist">
                                 <li class="nav-item" role="presentation">
-                                    <button class="nav-link active" id="all-tab" data-bs-toggle="pill"
-                                        data-bs-target="#all" type="button">
+                                    <button class="nav-link {{ request('status', 'all') == 'all' ? 'active' : '' }}" 
+                                            type="button" onclick="filterByStatus('all')">
                                         Semua
                                     </button>
                                 </li>
                                 <li class="nav-item" role="presentation">
-                                    <button class="nav-link" id="pending-tab" data-bs-toggle="pill"
-                                        data-bs-target="#pending" type="button">
+                                    <button class="nav-link {{ request('status') == 'pending' ? 'active' : '' }}" 
+                                            type="button" onclick="filterByStatus('pending')">
                                         Menunggu
                                     </button>
                                 </li>
                                 <li class="nav-item" role="presentation">
-                                    <button class="nav-link" id="accepted-tab" data-bs-toggle="pill"
-                                        data-bs-target="#accepted" type="button">
+                                    <button class="nav-link {{ request('status') == 'accepted' ? 'active' : '' }}" 
+                                            type="button" onclick="filterByStatus('accepted')">
                                         Diterima
                                     </button>
                                 </li>
                                 <li class="nav-item" role="presentation">
-                                    <button class="nav-link" id="otw-tab" data-bs-toggle="pill" data-bs-target="#otw"
-                                        type="button">
+                                    <button class="nav-link {{ request('status') == 'otw' ? 'active' : '' }}" 
+                                            type="button" onclick="filterByStatus('otw')">
                                         Dalam Perjalanan
                                     </button>
                                 </li>
                                 <li class="nav-item" role="presentation">
-                                    <button class="nav-link" id="completed-tab" data-bs-toggle="pill"
-                                        data-bs-target="#completed" type="button">
+                                    <button class="nav-link {{ request('status') == 'completed' ? 'active' : '' }}" 
+                                            type="button" onclick="filterByStatus('completed')">
                                         Selesai
                                     </button>
                                 </li>
+                                <li class="nav-item" role="presentation">
+                                    <button class="nav-link {{ request('status') == 'cancelled' ? 'active' : '' }}" 
+                                            type="button" onclick="filterByStatus('cancelled')">
+                                        Dibatalkan
+                                    </button>
+                                </li>
                             </ul>
+                        </div>
+
+                        <!-- Results Counter -->
+                        <div class="px-4 mb-2">
+                            <small class="text-muted">
+                                Menampilkan <strong>{{ $serviceRequests->count() }}</strong> 
+                                @if(request()->hasAny(['status', 'search', 'date_from', 'date_to']))
+                                    dari <strong>{{ $bengkel->serviceRequests->count() }}</strong>
+                                @endif
+                                permintaan
+                            </small>
                         </div>
 
                         <div class="table-responsive p-0">
                             <table class="table align-items-center mb-0" id="requestsTable">
                                 <thead>
                                     <tr>
-                                        <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
-                                            ID Permintaan</th>
                                         <th
-                                            class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">
+                                            class="text-uppercase  text-xxs font-weight-bolder opacity-7 ps-2">
                                             Pelanggan</th>
                                         <th
-                                            class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">
+                                            class="text-uppercase  text-xxs font-weight-bolder opacity-7 ps-2">
                                             Masalah</th>
                                         <th
-                                            class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">
+                                            class="text-uppercase  text-xxs font-weight-bolder opacity-7 ps-2">
                                             Status</th>
                                         <th
-                                            class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">
+                                            class="text-uppercase  text-xxs font-weight-bolder opacity-7 ps-2">
                                             Tanggal</th>
-                                        <th class="text-secondary opacity-7"></th>
+                                        <th class=" opacity-7"></th>
                                     </tr>
                                 </thead>
                                 <tbody>
                                     @forelse($serviceRequests as $request)
-                                        <tr data-status="{{ $request->status->name }}">
-                                            <td>
-                                                <p class="text-xs font-weight-bold mb-0 px-3">#{{ $request->id }}</p>
-                                            </td>
+                                        <tr>
                                             <td>
                                                 <div class="d-flex flex-column">
                                                     <h6 class="mb-0 text-sm">{{ $request->user->name }}</h6>
-                                                    <p class="text-xs text-secondary mb-0">{{ $request->user->email }}
-                                                    </p>
+                                                    <p class="text-xs text-secondary mb-0">{{ $request->user->email }}</p>
                                                 </div>
                                             </td>
                                             <td>
@@ -120,21 +186,14 @@
                                                         'completed' => 'Selesai',
                                                         'cancelled' => 'Dibatalkan',
                                                     ];
-                                                    $statusColor =
-                                                        $statusColors[$request->status->name] ??
-                                                        'bg-gradient-secondary';
-                                                    $statusLabel =
-                                                        $statusLabels[$request->status->name] ??
-                                                        ucfirst($request->status->name);
+                                                    $statusColor = $statusColors[$request->status->name] ?? 'bg-gradient-secondary';
+                                                    $statusLabel = $statusLabels[$request->status->name] ?? ucfirst($request->status->name);
                                                 @endphp
-                                                <span
-                                                    class="badge badge-sm {{ $statusColor }}">{{ $statusLabel }}</span>
+                                                <span class="badge badge-sm {{ $statusColor }}">{{ $statusLabel }}</span>
                                             </td>
                                             <td>
-                                                <p class="text-xs font-weight-bold mb-0">
-                                                    {{ $request->created_at->format('d M Y') }}</p>
-                                                <p class="text-xs text-secondary mb-0">
-                                                    {{ $request->created_at->format('H:i') }}</p>
+                                                <p class="text-xs font-weight-bold mb-0">{{ $request->created_at->format('d M Y') }}</p>
+                                                <p class="text-xs text-secondary mb-0">{{ $request->created_at->format('H:i') }}</p>
                                             </td>
                                             <td class="align-middle">
                                                 <a href="{{ route('bengkel.service-requests.show', $request) }}"
@@ -145,8 +204,14 @@
                                         </tr>
                                     @empty
                                         <tr>
-                                            <td colspan="6" class="text-center py-4">
-                                                <p class="text-secondary mb-0">Belum ada permintaan layanan.</p>
+                                            <td colspan="5" class="text-center py-4">
+                                                <p class="text-secondary mb-0">
+                                                    @if(request()->hasAny(['status', 'search', 'date_from', 'date_to']))
+                                                        Tidak ada permintaan layanan yang sesuai dengan filter.
+                                                    @else
+                                                        Belum ada permintaan layanan.
+                                                    @endif
+                                                </p>
                                             </td>
                                         </tr>
                                     @endforelse
@@ -291,25 +356,27 @@
 
     @push('scripts')
         <script>
-            document.addEventListener('DOMContentLoaded', function() {
-                const tabs = document.querySelectorAll('#statusFilter button');
-                const rows = document.querySelectorAll('#requestsTable tbody tr[data-status]');
+            function filterByStatus(status) {
+                document.getElementById('statusInput').value = status;
+                document.getElementById('filterForm').submit();
+            }
 
-                tabs.forEach(tab => {
-                    tab.addEventListener('click', function() {
-                        const targetStatus = this.id.replace('-tab', '');
+            // Auto-submit on search after user stops typing
+            let searchTimeout;
+            document.getElementById('searchInput').addEventListener('input', function() {
+                clearTimeout(searchTimeout);
+                searchTimeout = setTimeout(function() {
+                    document.getElementById('filterForm').submit();
+                }, 800);
+            });
 
-                        rows.forEach(row => {
-                            const rowStatus = row.getAttribute('data-status');
+            // Auto-submit on date change
+            document.getElementById('dateFrom').addEventListener('change', function() {
+                document.getElementById('filterForm').submit();
+            });
 
-                            if (targetStatus === 'all' || targetStatus === rowStatus) {
-                                row.style.display = '';
-                            } else {
-                                row.style.display = 'none';
-                            }
-                        });
-                    });
-                });
+            document.getElementById('dateTo').addEventListener('change', function() {
+                document.getElementById('filterForm').submit();
             });
         </script>
     @endpush

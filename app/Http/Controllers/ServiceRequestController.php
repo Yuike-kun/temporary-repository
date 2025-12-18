@@ -63,7 +63,7 @@ class ServiceRequestController extends Controller
         return view('pengguna.service-requests.my-requests', compact('serviceRequests'));
     }
 
-    public function bengkelRequests()
+    public function bengkelRequests(Request $request)
     {
         $user = Auth::user();
         $bengkel = $user->bengkel;
@@ -72,12 +72,75 @@ class ServiceRequestController extends Controller
             return redirect()->back()->with('error', 'Anda tidak memiliki bengkel yang terdaftar.');
         }
 
-        $serviceRequests = ServiceRequest::where('bengkel_id', $bengkel->id)
-            ->with('user')
-            ->latest()
-            ->get();
+        // Build query
+        $query = ServiceRequest::where('bengkel_id', $bengkel->id)->with('user');
+
+        // Apply status filter
+        if ($request->filled('status') && $request->status !== 'all') {
+            $query->where('status', ServiceRequestStatus::from($request->status));
+        }
+
+        // Apply search filter
+        if ($request->filled('search')) {
+            $search = $request->search;
+            $query->where(function($q) use ($search) {
+                $q->where('description', 'like', "%{$search}%")
+                  ->orWhereHas('user', function($q) use ($search) {
+                      $q->where('name', 'like', "%{$search}%")
+                        ->orWhere('email', 'like', "%{$search}%");
+                  });
+            });
+        }
+
+        // Apply date range filter
+        if ($request->filled('date_from')) {
+            $query->whereDate('created_at', '>=', $request->date_from);
+        }
+
+        if ($request->filled('date_to')) {
+            $query->whereDate('created_at', '<=', $request->date_to);
+        }
+
+        // Apply sorting
+        $sortBy = $request->get('sort_by', 'newest');
+        switch ($sortBy) {
+            case 'oldest':
+                $query->oldest();
+                break;
+            case 'customer':
+                $query->join('users', 'service_requests.user_id', '=', 'users.id')
+                      ->orderBy('users.name')
+                      ->select('service_requests.*');
+                break;
+            default: // newest
+                $query->latest();
+                break;
+        }
+
+        $serviceRequests = $query->get();
 
         return view('bengkel.service-requests.index', compact('serviceRequests', 'bengkel'));
+    }
+
+    /**
+     * Display a listing of service requests for admin
+     */
+    public function adminIndex()
+    {
+        $serviceRequests = ServiceRequest::with(['user', 'bengkel'])
+            ->latest()
+            ->paginate(15);
+
+        return view('admin.service-requests.index', compact('serviceRequests'));
+    }
+
+    /**
+     * Display the specified service request for admin
+     */
+    public function adminShow(ServiceRequest $serviceRequest)
+    {
+        $serviceRequest->load(['user', 'bengkel', 'review']);
+        return view('admin.service-requests.show', compact('serviceRequest'));
     }
 
     public function exportPdf(Request $request)

@@ -41,7 +41,7 @@
                     <div class="avatar bg-danger-subtle text-danger rounded size-12 mx-auto mb-3">
                         <i data-lucide="alert-triangle" class="size-6"></i>
                     </div>
-                    <h2 class="fw-bold mb-1 text-danger">25</h2>
+                    <h2 class="fw-bold mb-1 text-danger">{{ $emergencyRequests }}</h2>
                     <p class="text-muted mb-0">Laporan Darurat</p>
                 </div>
             </div>
@@ -54,7 +54,7 @@
                     <div class="avatar bg-warning-subtle text-warning rounded size-12 mx-auto mb-3">
                         <i data-lucide="truck" class="size-6"></i>
                     </div>
-                    <h2 class="fw-bold mb-1 text-warning">8</h2>
+                    <h2 class="fw-bold mb-1 text-warning">{{ $handledVehicles }}</h2>
                     <p class="text-muted mb-0">Kendaraan Ditangani</p>
                 </div>
             </div>
@@ -119,7 +119,7 @@
                                 <i class="fs-xs ri-circle-fill text-primary flex-shrink-0"></i>
                                 <div class="flex-grow-1">
                                     <h6 class="fw-normal mb-0">Malam <span class="text-muted">(30%)</span></h6>
-                                </div>
+                            </div>
                             </a>
                         </div>
                         <div class="col-md-4">
@@ -127,12 +127,12 @@
                                 <i class="fs-xs ri-circle-fill text-warning flex-shrink-0"></i>
                                 <div class="flex-grow-1">
                                     <h6 class="fw-normal mb-0">Pagi <span class="text-muted">(25%)</span></h6>
-                                </div>
+        </div>
                             </a>
-                        </div>
+                </div>
                     </div>
                 </div>
-            </div>
+        </div>
         </div><!-- end col -->
     </div>
 

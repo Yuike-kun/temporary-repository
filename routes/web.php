@@ -165,6 +165,12 @@ Route::prefix('service')->as('service.')->middleware(['auth', 'role:ADMIN'])->gr
     Route::delete('/delete/{service}', [ServiceController::class, 'destroy'])->name('destroy');
 });
 
+// Admin Service Requests
+Route::prefix('admin/service-requests')->as('admin.service-requests.')->middleware(['auth', 'role:ADMIN'])->group(function () {
+    Route::get('/', [ServiceRequestController::class, 'adminIndex'])->name('index');
+    Route::get('/{serviceRequest}', [ServiceRequestController::class, 'adminShow'])->name('show');
+});
+
 // service-requests (PUBLIC)
 Route::prefix('service-requests')->as('service-requests.')->middleware(['auth', 'role:PUBLIC'])->group(function () {
     Route::get('/bengkels', [ServiceRequestController::class, 'index'])->name('index');

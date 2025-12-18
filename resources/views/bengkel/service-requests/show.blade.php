@@ -27,7 +27,7 @@
                         </div>
                         <div class="col-md-6">
                             <p class="text-sm mb-2"><strong>Tanggal Permintaan:</strong> {{ $serviceRequest->created_at->format('d M Y, H:i') }}</p>
-                            <p class="text-sm mb-2"><strong>Status:</strong> 
+                            <p class="text-sm mb-2"><strong>Status:</strong>
                                 @php
                                     $statusColors = [
                                         'pending' => 'bg-gradient-warning',
@@ -67,13 +67,13 @@
                             <p class="text-sm mb-2"><strong>Longitude:</strong> {{ $serviceRequest->longitude }}</p>
                         </div>
                         <div class="col-md-6">
-                            <a href="https://www.google.com/maps?q={{ $serviceRequest->latitude }},{{ $serviceRequest->longitude }}" 
-                               target="_blank" 
+                            <a href="https://www.google.com/maps?q={{ $serviceRequest->latitude }},{{ $serviceRequest->longitude }}"
+                               target="_blank"
                                class="btn btn-info btn-sm">
                                 <i class="fas fa-map-marker-alt me-2"></i>Buka di Google Maps
                             </a>
-                            <a href="https://www.google.com/maps/dir/?api=1&origin={{ $bengkel->latitude }},{{ $bengkel->longitude }}&destination={{ $serviceRequest->latitude }},{{ $serviceRequest->longitude }}" 
-                               target="_blank" 
+                            <a href="https://www.google.com/maps/dir/?api=1&origin={{ $bengkel->latitude }},{{ $bengkel->longitude }}&destination={{ $serviceRequest->latitude }},{{ $serviceRequest->longitude }}"
+                               target="_blank"
                                class="btn btn-primary btn-sm">
                                 <i class="fas fa-directions me-2"></i>Dapatkan Arah
                             </a>
@@ -87,7 +87,7 @@
                     <form action="{{ route('bengkel.service-requests.update-status', $serviceRequest) }}" method="POST">
                         @csrf
                         @method('PATCH')
-                        
+
                         <div class="row">
                             <div class="col-md-8 mb-3">
                                 <select name="status" class="form-select" required>
@@ -135,8 +135,8 @@
                         <a href="mailto:{{ $serviceRequest->user->email }}" class="btn btn-outline-info btn-sm">
                             <i class="fas fa-envelope me-2"></i>Email Pelanggan
                         </a>
-                        <a href="https://wa.me/{{ preg_replace('/[^0-9]/', '', $serviceRequest->user->phone ?? '') }}" 
-                           target="_blank" 
+                        <a href="https://wa.me/{{ preg_replace('/[^0-9]/', '', $serviceRequest->user->phone ?? '') }}"
+                           target="_blank"
                            class="btn btn-outline-success btn-sm">
                             <i class="fab fa-whatsapp me-2"></i>WhatsApp
                         </a>
@@ -231,8 +231,8 @@
                         <a href="mailto:{{ $serviceRequest->user->email }}" class="btn btn-outline-info btn-sm">
                             <i class="fas fa-envelope me-2"></i>Email Customer
                         </a>
-                        <a href="https://wa.me/{{ preg_replace('/[^0-9]/', '', $serviceRequest->user->phone ?? '') }}" 
-                           target="_blank" 
+                        <a href="https://wa.me/{{ preg_replace('/[^0-9]/', '', $serviceRequest->user->phone ?? '') }}"
+                           target="_blank"
                            class="btn btn-outline-success btn-sm">
                             <i class="fab fa-whatsapp me-2"></i>WhatsApp
                         </a>

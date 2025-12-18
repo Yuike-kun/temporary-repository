@@ -32,6 +32,10 @@ class AdminReportController extends Controller
             $query->whereDate('created_at', '<=', $request->date_to);
         }
 
+        if ($request->has('year') && $request->year) {
+            $query->whereYear('created_at', $request->year);
+        }
+
         // Search
         if ($request->has('search') && $request->search) {
             $search = $request->search;
@@ -86,6 +90,10 @@ class AdminReportController extends Controller
             $query->whereDate('created_at', '<=', $request->date_to);
         }
 
+        if ($request->has('year') && $request->year) {
+            $query->whereYear('created_at', $request->year);
+        }
+
         $serviceRequests = $query->latest()->get();
 
         // Calculate statistics
@@ -106,6 +114,7 @@ class AdminReportController extends Controller
                 'bengkel_id' => $request->bengkel_id,
                 'date_from' => $request->date_from,
                 'date_to' => $request->date_to,
+                'year' => $request->year,
             ]
         ]);
 
@@ -121,6 +130,7 @@ class AdminReportController extends Controller
             'bengkel_id' => $request->bengkel_id,
             'date_from' => $request->date_from,
             'date_to' => $request->date_to,
+            'year' => $request->year,
         ];
 
         $filename = 'Laporan_Darurat_' . now()->format('Y-m-d_His') . '.xlsx';
